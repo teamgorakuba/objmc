@@ -47,7 +47,7 @@ objects = []
 def readobj(name):
     obj = open(name + ".obj", "r")
     d = {"positions": [], "uvs": [], "normals": [], "faces": []}
-    for line in tqdm(obj):
+    for line in obj:
         if line.startswith("v "):
             d["positions"].append([float(i) for i in line.strip().split(" ")[1:]])
         if line.startswith("vt "):
@@ -231,11 +231,12 @@ def encodeface(id, frame, index):
 
 
 # encode all the data
-for frame in range(0, nframes):
-    print("encoding frame", frame + 1, "of", nframes, "\t\t", "{:.2f}".format((frame) / nframes * 100), "%")
+for frame in tqdm(range(nframes)):
+    # print("encoding frame", frame + 1, "of", nframes, "\t\t", "{:.2f}".format((frame) / nframes * 100), "%")
     id = [int(i) for i in frames[frame].split(" ")]
-    for i in range(0, nfaces):
+    for i in tqdm(range(nfaces),leave=False):
         encodeface(id, frame, i)
 
-print("Done\t\t\t\t 100.00 %")
+print("Saveing...")
 out.save(output[1] + ".png")
+print("Done.")
