@@ -47,7 +47,7 @@ objects = []
 def readobj(name):
     obj = open(name + ".obj", "r")
     d = {"positions": [], "uvs": [], "normals": [], "faces": []}
-    for line in obj:
+    for line in tqdm(obj):
         if line.startswith("v "):
             d["positions"].append([float(i) for i in line.strip().split(" ")[1:]])
         if line.startswith("vt "):
