@@ -2,6 +2,7 @@ import math
 import json
 from PIL import Image, ImageOps
 import argparse
+from tqdm import tqdm
 import os.path
 
 parser = argparse.ArgumentParser(description='python script to convert .OBJ files into Minecraft, rendering them in game with a core shader.\nGithub: https://github.com/Godlander/objmc')
@@ -55,12 +56,14 @@ def readobj(name):
   obj.close()
   return d
 #read obj
-objects.append(readobj(objs[0]))
-for i in range(1,len(objs)):
+bar = tqdm(range(len(objs)))
+bar.set_description("reading obj")
+for i in bar:
   objects.append(readobj(objs[i]))
-  if len(objects[i]["faces"]) != len(objects[0]["faces"]):
-    print("mismatched obj face count")
-    quit()
+  if i != 0:
+    if len(objects[i]["faces"]) != len(objects[0]["faces"]):
+      print("mismatched obj face count")
+      quit()
 
 #calculate heights
 ntextures = len(texs)
